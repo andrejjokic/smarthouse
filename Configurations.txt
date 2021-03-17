@@ -1,0 +1,72 @@
+-JDBC Connection Pool:
+	Pool Name = smarthousepool
+	Resource Type = javax.sql.DataSource
+	Database Driver Vendor = MySql
+	Datasource Classname = com.mysql.cj.jdbc.MysqlDataSource
+	allowPublicKeyRetrieval = true
+	useSSL = false
+	password = 123
+	databaseName = smarthouse
+	serverName = localhost
+	user = root
+	portNumber = 3308
+
+-JDBC Resources:
+	Name = smarthouse
+	JDBC Connection Pool = smarthousepool
+
+-Persistence unit:
+    	<persistence-unit name="my_persistence_unit" transaction-type="JTA">
+       		<jta-data-source>smarthouse</jta-data-source>
+       		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+    	</persistence-unit>
+
+-Kod kreiranja EntityManagerFactory-a promeniti argumenta persistence jedinice(ako se drugacije zove projekat).
+-U UserDevice promeniti URI REST metoda, treba da se promeni ime projekta(ako se drugacije zove projekat).
+-Mora RUCNO da se napravi smarthouse.entities paket, i u njega mapiramo klase iz baze(u svim projektima sem u UserDevice).
+
+Java ant -> Java Enterprise -> Enterprise client Application:
+	1.Player
+	2.Alarm
+	3.Planner1
+Java maven -> Java Application
+	1.UserDevice
+Java maven -> Java web Application
+	1.CustomerService2
+
+-Dodamo sledece biblioteke u ant projekte: (Java with ant -> Java Enterprise -> Enterprise client application)
+	-EclipseLink 2.1 (Add Library)
+	-JDBC Driver	 (Add JAR)
+	-java 8 api
+
+-Dodamo u UserDevice i Planner projekat (Maven Java Application)
+	1.Dependencies -> Add Dependencies
+	2.Group ID = org.glassfish.jersey.core
+	  Artifact ID = jersey-client
+	  Version = 2.25.1
+
+-Napravimo JMS Destination Resource
+	1.ime = playerQueue
+	  tip = javax.jms.Queue
+	2.ime = alarmQueue
+	  tip = javax.jms.Queue
+	3.ime = plannerQueue
+	  tip = javax.jms.Queue
+
+-Ako izbacuje exception sun.security.ssl.SSLExtension odraditi:
+	1.Users -> Andrej -> Glassfish_server -> glassfish -> modules -> endorsed
+	2.Otvoriti grizzly-npn-bootstrap pomocu winrara i obrisati sun folder
+
+
+-Dodati folder libs unutar UserDevice projekta(isto i za Planner)
+	1.Dodati json biblioteku tu
+	2.Dodati dependency
+		        <dependency>
+            			<groupId>org.json</groupId>
+            			<artifactId>json</artifactId>
+            			<version>20201115</version>
+       			</dependency>
+
+-U planner projektu: (Ant -> enterprise -> enterprise application client)
+	-dodamo sve jar-ove iz iz libs foldera
+	
